@@ -14,7 +14,7 @@ Branch: `feat/phase-4-hardening` (holds phases 1–4, stacked). Nothing is pushe
 
 ## 1. Decisions owed by Vijayaganth
 
-- [ ] **Favicon**: `app/favicon.ico` is still the default Next.js icon. Supply one, or approve a plain monogram.
+- [x] **Favicon**: orb + "V" set from Vijayaganth (`app/favicon.ico`, `app/icon.svg`, `app/apple-icon.png`, PWA icons in `public/`, `app/manifest.ts`).
 - [ ] **OG image**: none yet; link previews show text only. Supply one, or approve a generated `app/opengraph-image.tsx` (name + title on the base colour, no new graphics).
 - [ ] **Domain**: custom domain or `*.vercel.app`. Once known, set `metadataBase` in `app/layout.tsx` so OG URLs are absolute.
 
