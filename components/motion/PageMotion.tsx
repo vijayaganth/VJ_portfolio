@@ -6,7 +6,7 @@ import { heroReveal } from "./effects/hero";
 import { sectionBackgrounds } from "./effects/backgrounds";
 import { workScroll, workTilt } from "./effects/work";
 import { journeyTimeline } from "./effects/journey";
-import { skillPills } from "./effects/skills";
+import { skillsCloud } from "./effects/skills";
 
 /** Attaches all page motion to the static markup through its data-* hooks. */
 export function PageMotion({ children }: { children: ReactNode }) {
@@ -24,7 +24,7 @@ export function PageMotion({ children }: { children: ReactNode }) {
           heroReveal(el, c),
           workScroll(el, c),
           journeyTimeline(el, c),
-          skillPills(el, c),
+          skillsCloud(el, c),
           sectionBackgrounds(el, c),
         ];
         return () => cleanups.forEach((fn) => fn?.());
