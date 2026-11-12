@@ -1,4 +1,4 @@
-import { gsap, type Conditions } from "../gsap";
+import { gsap, ScrollTrigger, type Conditions } from "../gsap";
 
 /** Desktop: pin the Work section and move the cards sideways as you scroll down. */
 export function workScroll(root: HTMLElement, c: Conditions) {
@@ -21,7 +21,7 @@ export function workScroll(root: HTMLElement, c: Conditions) {
   track.dataset.horizontal = "";
   const distance = () => Math.max(0, track.scrollWidth - track.clientWidth);
 
-  gsap.to(track, {
+  const slide = gsap.to(track, {
     x: () => -distance(),
     ease: "none",
     scrollTrigger: {
@@ -35,17 +35,51 @@ export function workScroll(root: HTMLElement, c: Conditions) {
     },
   });
 
+  // Each framed screen drifts against the slide, so it reads as a layer behind the card face.
+  track.querySelectorAll<HTMLElement>("[data-work-shot]").forEach((shot) => {
+    gsap.fromTo(
+      shot,
+      { xPercent: 6 },
+      {
+        xPercent: -6,
+        ease: "none",
+        scrollTrigger: {
+          trigger: shot.closest("article"),
+          containerAnimation: slide,
+          start: "left right",
+          end: "right left",
+          scrub: true,
+        },
+      },
+    );
+  });
+
+  // The pin length is measured from the row's width. Re-measure when that width changes without a
+  // window resize (late layout, style changes), or the pin ends before the last card is in view.
+  let width = track.scrollWidth;
+  const resized = new ResizeObserver(() => {
+    if (track.scrollWidth === width) return;
+    width = track.scrollWidth;
+    ScrollTrigger.refresh();
+  });
+  Array.from(track.children).forEach((card) => resized.observe(card));
+
   return () => {
+    resized.disconnect();
     delete track.dataset.horizontal;
   };
 }
 
-/** Cards tilt toward the pointer in 3D. Desktop with a fine pointer only. */
+/**
+ * Cards tilt toward the pointer in 3D. Desktop with a fine pointer only.
+ * Applies to every `[data-tilt]` on the page; `data-tilt="soft"` (wide Journey cards) tilts less.
+ */
 export function workTilt(root: HTMLElement) {
   const cards = root.querySelectorAll<HTMLElement>("[data-tilt]");
   const cleanups: (() => void)[] = [];
 
   cards.forEach((card) => {
+    const max = card.dataset.tilt === "soft" ? 8 : 16; // degrees across the full card
     gsap.set(card, { transformPerspective: 900 });
     const rotX = gsap.quickTo(card, "rotationX", { duration: 0.5, ease: "power3.out" });
     const rotY = gsap.quickTo(card, "rotationY", { duration: 0.5, ease: "power3.out" });
@@ -54,8 +88,8 @@ export function workTilt(root: HTMLElement) {
       const r = card.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width - 0.5;
       const py = (e.clientY - r.top) / r.height - 0.5;
-      rotY(px * 16);
-      rotX(-py * 16);
+      rotY(px * max);
+      rotX(-py * max);
     };
     const leave = () => {
       rotX(0);

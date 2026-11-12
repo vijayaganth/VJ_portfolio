@@ -1,6 +1,7 @@
 /* Size and position come from the Hero; this only layers the fallback and the canvas. */
 .slot {
   border-radius: 50%;
+  pointer-events: none;
 }
 
 .fallback {

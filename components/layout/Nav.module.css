@@ -1,0 +1,357 @@
+/* Transparent over the hero; a dark glass bar once scrolled, so it reads on the yellow and teal sections too. */
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  /* Above everything on the page, including the Skills cloud's depth-sorted pills. */
+  z-index: 1000;
+  color: var(--c-text);
+  transition:
+    background 0.35s ease,
+    border-color 0.35s ease,
+    backdrop-filter 0.35s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.header[data-scrolled],
+.header[data-open] {
+  border-bottom-color: color-mix(in srgb, var(--c-text) 8%, transparent);
+  /* Nearly opaque: a thinner glass turns muddy over the yellow Journey section. */
+  background: color-mix(in srgb, var(--c-base) 93%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+  height: var(--nav-h);
+  transition: height 0.35s ease;
+}
+
+.header[data-scrolled] .nav {
+  height: 76px;
+}
+
+/* Wordmark: a small orb, then the name; the letters hop in a wave on hover. */
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  justify-self: start;
+  min-height: var(--tap);
+}
+
+.wordmark:hover {
+  opacity: 1;
+}
+
+.mark {
+  position: relative;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--orb-gradient);
+  box-shadow: 0 0 18px var(--orb-glow);
+  animation: turn 12s linear infinite;
+}
+
+/* A glint on the orb so its turning reads. */
+.mark::after {
+  content: "";
+  position: absolute;
+  top: 18%;
+  left: 22%;
+  width: 26%;
+  height: 26%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c-text) 70%, transparent);
+  filter: blur(2px);
+}
+
+.wordmark:hover .mark {
+  animation-duration: 2.5s;
+}
+
+@keyframes turn {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* A teal-magenta shine sweeps across the name every few seconds. */
+.name {
+  display: inline-flex;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: -0.025em;
+  background: linear-gradient(
+      100deg,
+      var(--c-text) 40%,
+      var(--c-teal) 47%,
+      var(--c-magenta-text) 53%,
+      var(--c-text) 60%
+    )
+    0 0 / 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 6s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0%,
+  55% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+.letter {
+  display: inline-block;
+}
+
+.wordmark:hover .letter {
+  animation: hop 0.5s cubic-bezier(0.3, 0.7, 0.4, 1.5) calc(var(--i) * 28ms);
+}
+
+@keyframes hop {
+  40% {
+    translate: 0 -5px;
+    color: var(--c-teal);
+  }
+}
+
+/* Links in a pill; the indicator slides under the hovered or current link. */
+.pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border: 1px solid color-mix(in srgb, var(--c-text) 12%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--c-text) 4%, transparent);
+}
+
+.indicator {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--c-text) 12%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c-text) 10%, transparent);
+  transition:
+    left 0.35s cubic-bezier(0.3, 0.7, 0.2, 1),
+    width 0.35s cubic-bezier(0.3, 0.7, 0.2, 1),
+    opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 18px;
+  border-radius: var(--radius-pill);
+  font-size: 15px;
+  color: var(--c-muted);
+  transition: color 0.25s ease;
+}
+
+.link:hover,
+.link[aria-current] {
+  opacity: 1;
+  color: var(--c-text);
+}
+
+/* A teal dot marks the section in view. */
+.link[aria-current]::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--c-teal);
+  box-shadow: 0 0 8px var(--c-teal);
+}
+
+.end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 24px;
+  border-radius: var(--radius-pill);
+  background: var(--c-yellow);
+  color: var(--c-ink);
+  font-weight: 500;
+  font-size: 15px;
+  transition:
+    translate 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.cta:hover {
+  opacity: 1;
+  translate: 0 -2px;
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--c-yellow) 35%, transparent);
+}
+
+.toggle {
+  display: none;
+}
+
+.panel {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .nav,
+  .indicator,
+  .link,
+  .cta {
+    transition: none;
+  }
+
+  .mark,
+  .name,
+  .wordmark:hover .mark,
+  .wordmark:hover .letter {
+    animation: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .nav {
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+  }
+
+  .header[data-scrolled] .nav {
+    height: 68px;
+  }
+
+  .mark {
+    width: 26px;
+    height: 26px;
+  }
+
+  .name {
+    font-size: 21px;
+  }
+
+  .pill {
+    display: none;
+  }
+
+  .cta {
+    padding: 0 18px;
+    font-size: 14px;
+  }
+
+  /* Two bars that cross into an X when open. */
+  .toggle {
+    display: grid;
+    place-items: center;
+    width: var(--tap);
+    height: var(--tap);
+    padding: 0;
+    border: 1px solid color-mix(in srgb, var(--c-text) 16%, transparent);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--c-text) 4%, transparent);
+    color: var(--c-text);
+    cursor: pointer;
+  }
+
+  .toggle:focus-visible {
+    outline: 2px solid var(--c-yellow);
+    outline-offset: 2px;
+  }
+
+  .bars,
+  .bars::before {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    border-radius: 2px;
+    background: currentColor;
+    transition:
+      rotate 0.3s ease,
+      translate 0.3s ease;
+  }
+
+  .bars {
+    position: relative;
+    translate: 0 -3px;
+  }
+
+  .bars::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 0;
+  }
+
+  .toggle[aria-expanded="true"] .bars {
+    translate: 0 0;
+    rotate: 45deg;
+  }
+
+  .toggle[aria-expanded="true"] .bars::before {
+    top: 0;
+    rotate: -90deg;
+  }
+
+  .panel {
+    display: block;
+    padding-block: 8px 28px;
+    border-top: 1px solid color-mix(in srgb, var(--c-text) 8%, transparent);
+  }
+
+  .panel[hidden] {
+    display: none;
+  }
+
+  .panelLink {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding-block: 14px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-text) 8%, transparent);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -0.03em;
+  }
+
+  .panelLink[aria-current] {
+    color: var(--c-teal);
+  }
+
+  .panelIndex {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--c-muted);
+  }
+}
+
+@media (max-width: 760px) and (prefers-reduced-motion: reduce) {
+  .bars,
+  .bars::before {
+    transition: none;
+  }
+}
