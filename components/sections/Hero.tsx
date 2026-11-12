@@ -28,12 +28,12 @@ export function Hero() {
         <div className={styles.orb} data-orb-slot aria-hidden="true" />
 
         <div className={styles.content}>
-          <div className={`label ${styles.eyebrow}`}>{hero.eyebrow}</div>
+          <div className={`label ${styles.eyebrow}`} data-hero-reveal>{hero.eyebrow}</div>
           <h1 className={styles.title} data-split="lines">
             {hero.title}
           </h1>
-          <p className={styles.body}>{hero.body}</p>
-          <div className={`label ${styles.cue}`}>
+          <p className={styles.body} data-hero-reveal>{hero.body}</p>
+          <div className={`label ${styles.cue}`} data-hero-reveal>
             <span className={styles.cueLine} />
             <span>{hero.cue}</span>
           </div>

@@ -6,7 +6,7 @@ import styles from "./Work.module.css";
 export function Work() {
   const { work } = site;
   return (
-    <Section id="work" bg="work">
+    <Section id="work" bg="work" className={styles.section}>
       <div className={`container ${styles.inner}`}>
         <div className={styles.header}>
           <h2 className="sectionTitle">{work.title}</h2>

@@ -1,4 +1,5 @@
 import { Footer } from "@/components/layout/Footer";
+import { PageMotion } from "@/components/motion/PageMotion";
 import { Contact } from "@/components/sections/Contact";
 import { Hero } from "@/components/sections/Hero";
 import { Intro } from "@/components/sections/Intro";
@@ -8,7 +9,7 @@ import { Work } from "@/components/sections/Work";
 
 export default function Home() {
   return (
-    <div id="top">
+    <PageMotion>
       <main>
         <Hero />
         <Intro />
@@ -18,6 +19,6 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
-    </div>
+    </PageMotion>
   );
 }

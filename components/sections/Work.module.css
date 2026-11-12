@@ -1,3 +1,7 @@
+.section {
+  overflow: clip;
+}
+
 .inner {
   padding-block: 120px;
 }
@@ -66,6 +70,16 @@
   border: 1.5px solid var(--c-ink);
   border-radius: var(--radius-pill);
   font-size: 13px;
+}
+
+/* Set by the motion layer on desktop: one row that scrolls sideways while pinned. */
+.track[data-horizontal] {
+  display: flex;
+}
+
+.track[data-horizontal] .card {
+  flex: 0 0 min(560px, 44vw);
+  will-change: transform;
 }
 
 @media (max-width: 760px) {

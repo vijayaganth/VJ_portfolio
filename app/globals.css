@@ -75,6 +75,19 @@ a:focus-visible {
   }
 }
 
+/* Motion layer: hero copy waits for JS so it can reveal without a flash. */
+@media (scripting: enabled) {
+  [data-split],
+  [data-hero-reveal] {
+    visibility: hidden;
+  }
+}
+
+/* Motion layer: sections go transparent and the body background follows the scroll. */
+.bg-motion [data-bg] {
+  background: transparent !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
