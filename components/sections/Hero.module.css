@@ -1,5 +1,8 @@
 .hero {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
   overflow: hidden;
 }
 
@@ -15,96 +18,26 @@
   pointer-events: none;
 }
 
+/* Everything below the fixed nav; the copy and the orb are both centred in it. */
 .inner {
   position: relative;
-}
-
-.nav {
-  position: relative;
-  z-index: 2;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 32px 0;
-}
-
-.wordmark {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 22px;
-  letter-spacing: -0.02em;
-}
-
-.links {
-  display: flex;
-  align-items: center;
-  gap: 36px;
-  font-size: 15px;
-}
-
-/* Underline grows from the left on hover. */
-.link {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--tap);
-}
-
-.link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 8px;
-  height: 1.5px;
-  background: var(--c-teal);
-  transform: scaleX(0);
-  transform-origin: right center;
-  transition: transform 0.35s ease;
-}
-
-.link:hover {
-  opacity: 1;
-}
-
-.link:hover::after {
-  transform: scaleX(1);
-  transform-origin: left center;
-}
-
-.cta {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--tap);
-  padding: 0 24px;
-  border-radius: var(--radius-pill);
-  background: var(--c-yellow);
-  color: var(--c-ink);
-  font-weight: 500;
-  font-size: 15px;
-  transition:
-    translate 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.cta:hover {
-  opacity: 1;
-  translate: 0 -2px;
-  box-shadow: 0 10px 28px color-mix(in srgb, var(--c-yellow) 35%, transparent);
-}
-
-.cta:focus-visible {
-  outline-color: var(--c-yellow);
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  padding-top: var(--nav-h);
 }
 
 /* The orb's box. Rings and dots are laid out in % of it; the slot fills it. */
 .orbWrap {
   position: absolute;
   right: -40px;
-  top: 80px;
+  /* Centre of the area below the nav. Margins, not translate: GSAP owns this element's transform. */
+  top: calc(50% + var(--nav-h) / 2);
   width: 580px;
   height: 580px;
+  margin-top: -290px;
   isolation: isolate;
   /* Decorative only: never block the nav or the links under it. */
   pointer-events: none;
@@ -172,7 +105,7 @@
   flex-direction: column;
   gap: 32px;
   max-width: 860px;
-  padding: 200px 0 96px;
+  padding-block: 72px;
 }
 
 .eyebrowRow {
@@ -307,10 +240,6 @@
     background: var(--c-muted);
   }
 
-  .link::after,
-  .cta {
-    transition: none;
-  }
 }
 
 @media (max-width: 760px) {
@@ -319,32 +248,17 @@
     mask-image: radial-gradient(ellipse 80% 40% at 80% 22%, var(--c-ink), transparent);
   }
 
-  .nav {
-    gap: 16px;
-    padding: 20px 0;
-  }
-
-  .wordmark {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--tap);
-    font-size: 20px;
-  }
-
-  .links {
-    display: none;
-  }
-
-  .cta {
-    padding: 0 20px;
-    font-size: 14px;
+  /* Phones: orb at the top right, the copy below it. */
+  .inner {
+    display: block;
   }
 
   .orbWrap {
     right: -70px;
-    top: 96px;
+    top: calc(var(--nav-h) + 12px);
     width: 300px;
     height: 300px;
+    margin-top: 0;
   }
 
   .orb {

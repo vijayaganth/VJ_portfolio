@@ -35,25 +35,8 @@ export function Hero() {
     <Section bg="base" className={styles.hero}>
       <div className={styles.grid} aria-hidden="true" />
 
+      {/* The nav is fixed above the page (components/layout/Nav); the hero starts below it. */}
       <div className={`container ${styles.inner}`}>
-        <header>
-          <nav className={styles.nav} aria-label="Primary">
-            <a href="#top" className={styles.wordmark}>
-              {site.name}
-            </a>
-            <div className={styles.links}>
-              {site.nav.map((item) => (
-                <a key={item.href} href={item.href} className={styles.link}>
-                  {item.label}
-                </a>
-              ))}
-            </div>
-            <a href={`mailto:${site.email}`} className={styles.cta}>
-              {site.cta}
-            </a>
-          </nav>
-        </header>
-
         {/* Orb with orbit rings; dots travel the rings and pass behind and in front of it. */}
         <div className={styles.orbWrap} data-hero-orb>
           <Orbit half="back" />

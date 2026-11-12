@@ -29,6 +29,7 @@
   --container: 1200px;
   --gutter: 56px;
   --tap: 44px;
+  --nav-h: 108px; /* fixed header at the top of the page */
   --radius-pill: 999px;
 
   /* static hero orb (also the fallback for the 3D orb) */
@@ -44,5 +45,6 @@
 @media (max-width: 760px) {
   :root {
     --gutter: 24px;
+    --nav-h: 84px;
   }
 }

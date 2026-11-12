@@ -30,5 +30,5 @@ Load `portfolio-tokens` first.
 - `text-wrap: pretty` on the intro statement; keep it.
 - Journey section is yellow with ink text: dividers and focus rings switch to ink.
 - Hero orb is `position:absolute` and overflows right; parent hero has `overflow:hidden`. Do not let it cause horizontal scroll at 390.
-- Nav links hide at ≤ 760 in the reference. Keep the "Let's talk" button visible.
+- The nav is a fixed header (`components/layout/Nav.tsx`), not part of the Hero; `--nav-h` reserves its height. At ≤ 760 the links move into a menu panel behind a menu button; "Let's talk" stays visible.
 - Do not add anything not in the reference (no hamburger menu, icons, extra sections) without asking.
