@@ -1,5 +1,6 @@
 import { Footer } from "@/components/layout/Footer";
 import { Nav } from "@/components/layout/Nav";
+import { Glow } from "@/components/motion/Glow";
 import { PageMotion } from "@/components/motion/PageMotion";
 import { Contact } from "@/components/sections/Contact";
 import { Hero } from "@/components/sections/Hero";
@@ -21,6 +22,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <Glow />
     </PageMotion>
   );
 }
