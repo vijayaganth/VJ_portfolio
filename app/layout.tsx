@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { site } from "@/content/site";
@@ -23,9 +23,29 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
+const title = "Vijayaganth – Portfolio";
+
 export const metadata: Metadata = {
-  title: "Vijayaganth – Portfolio",
+  title,
   description: site.hero.body,
+  authors: [{ name: site.name, url: site.linkedin }],
+  openGraph: {
+    type: "website",
+    title,
+    description: site.hero.body,
+    siteName: site.name,
+    locale: "en_IN",
+  },
+  twitter: {
+    card: "summary",
+    title,
+    description: site.hero.body,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#06111f",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

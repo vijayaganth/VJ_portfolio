@@ -24,7 +24,7 @@ export default function OrbCanvas({ pointer, active, mobile, onReady }: Props) {
       dpr={[1, mobile ? 1.5 : 2]}
       frameloop={active ? "always" : "never"}
       camera={{ fov: FOV, position: [0, 0, DISTANCE], near: 0.1, far: 20 }}
-      gl={{ antialias: !mobile, alpha: true, powerPreference: "high-performance" }}
+      gl={{ antialias: !mobile, alpha: true, powerPreference: "high-performance", failIfMajorPerformanceCaveat: true }}
       onCreated={() => requestAnimationFrame(onReady)}
       aria-hidden="true"
     >

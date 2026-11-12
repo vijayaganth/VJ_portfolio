@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "shots": "node scripts/shots.mjs"
+    "shots": "node scripts/shots.mjs",
+    "lh": "lighthouse http://localhost:3001 --form-factor=mobile --only-categories=performance,accessibility,best-practices,seo --output=json --output=html --output-path=./reports/lh --chrome-flags=--headless=new --quiet"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -26,6 +27,7 @@
     "@types/three": "^0.187.0",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
+    "lighthouse": "^13.6.0",
     "playwright-core": "^1.65.0",
     "typescript": "^5"
   },

@@ -75,10 +75,9 @@ a:focus-visible {
   }
 }
 
-/* Motion layer: hero copy waits for JS so it can reveal without a flash. */
+/* Motion layer: the hero H1 waits for JS so it can split into lines without a flash. */
 @media (scripting: enabled) {
-  [data-split],
-  [data-hero-reveal] {
+  [data-split] {
     visibility: hidden;
   }
 }

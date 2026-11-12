@@ -4,14 +4,34 @@
     {
       "name": "dev",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev"],
+      "runtimeArgs": [
+        "dev"
+      ],
       "port": 3000
     },
     {
       "name": "design",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4000", "--directory", "design"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4000",
+        "--directory",
+        "design"
+      ],
       "port": 4000
+    },
+    {
+      "name": "prod",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "exec",
+        "next",
+        "start",
+        "-p",
+        "3001"
+      ],
+      "port": 3001
     }
   ]
 }

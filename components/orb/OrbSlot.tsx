@@ -6,13 +6,16 @@ import styles from "./Orb.module.css";
 
 const OrbCanvas = dynamic(() => import("./OrbCanvas"), { ssr: false });
 
-/** Skip WebGL where it would hurt: reduced motion, data saver, weak devices, no WebGL2. */
+/** Skip WebGL where it would hurt: reduced motion, data saver, weak devices, no WebGL2 or software-only WebGL. */
 function canRender3D() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
   const nav = navigator as Navigator & { connection?: { saveData?: boolean }; deviceMemory?: number };
   if (nav.connection?.saveData) return false;
   if (nav.deviceMemory !== undefined && nav.deviceMemory < 4) return false;
-  return !!document.createElement("canvas").getContext("webgl2");
+  // failIfMajorPerformanceCaveat: no context when the browser would fall back to software rendering.
+  const gl = document.createElement("canvas").getContext("webgl2", { failIfMajorPerformanceCaveat: true });
+  gl?.getExtension("WEBGL_lose_context")?.loseContext();
+  return !!gl;
 }
 
 /**
