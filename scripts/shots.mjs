@@ -8,7 +8,7 @@ const viewports = { desktop: { width: 1440, height: 900 }, mobile: { width: 390,
 const stops = ["top", "#work", "work-mid", "work-end", "#journey", "#skills", "#contact"];
 
 await mkdir("shots", { recursive: true });
-const browser = await chromium.launch({ channel: "chrome" });
+const browser = await chromium.launch({ channel: "chrome", args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"] });
 
 for (const [name, viewport] of Object.entries(viewports)) {
   for (const reducedMotion of ["no-preference", "reduce"]) {

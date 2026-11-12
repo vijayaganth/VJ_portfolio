@@ -1,5 +1,6 @@
 import { site } from "@/content/site";
 import { Section } from "@/components/layout/Section";
+import { OrbSlot } from "@/components/orb/OrbSlot";
 import styles from "./Hero.module.css";
 
 export function Hero() {
@@ -25,7 +26,7 @@ export function Hero() {
           </nav>
         </header>
 
-        <div className={styles.orb} data-orb-slot aria-hidden="true" />
+        <OrbSlot className={styles.orb} />
 
         <div className={styles.content}>
           <div className={`label ${styles.eyebrow}`} data-hero-reveal>{hero.eyebrow}</div>

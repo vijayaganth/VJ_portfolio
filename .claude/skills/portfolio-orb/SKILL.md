@@ -21,7 +21,6 @@ components/orb/
   OrbCanvas.tsx   <Canvas dpr={[1, isMobile ? 1.5 : 2]} gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }} frameloop="demand"|"always">
   Orb.tsx         <mesh><icosahedronGeometry args={[1, isMobile ? 32 : 64]} /><shaderMaterial …/></mesh>
   shaders/orb.vert.glsl, orb.frag.glsl  (import as strings via a raw loader or template literals)
-  DevBridge.tsx   dev only
 ```
 Uniforms: `uTime, uPointer (vec2), uHover (float), uTeal, uBlue, uMagenta, uYellow, uBase (vec3), uNoiseScale, uNoiseStrength, uFresnelPower, uGlow`.
 
@@ -34,6 +33,6 @@ Loading
 Performance budget: 1 draw call (2 if a glow sprite is used), no textures, no postprocessing bloom (fake glow in shader / CSS box-shadow on the slot), orb chunk ≤ 160 kB gzip, 60fps on mid-range phone.
 
 ## Dev tooling (threejs-devtools-mcp)
-- `DevBridge.tsx` is imported only via `process.env.NODE_ENV === 'development' && dynamic(() => import('./DevBridge'))`. Verify after `pnpm build` that no bridge code exists: `grep -r "devtools" .next/static || echo clean`.
+- No bridge code lives in the app: the MCP's proxy injects it. `set_dev_port 3000`, then open `http://localhost:9222` in a browser (Playwright with local Chrome and `--use-angle=swiftshader` works headless). Nothing ships to production. The `__THREE_DEVTOOLS__` strings in the built three chunk are three.js's own no-op hook, not ours.
 - Tuning loop: `scene_tree` → `shader_list` → `set_uniform` (live preview, tell the user nothing is saved) → `take_screenshot` → on approval `pending_changes` → write values into `Orb.tsx` defaults → `pending_changes clear=true`.
 - Perf check: `performance_snapshot`, `draw_call_breakdown`, `memory_stats`, `dispose_check` after hot reloads.

@@ -51,8 +51,6 @@
   top: 80px;
   width: 580px;
   height: 580px;
-  border-radius: 50%;
-  background: var(--orb-gradient);
   box-shadow: 0 0 140px var(--orb-glow);
 }
 
