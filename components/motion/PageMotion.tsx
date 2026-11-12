@@ -4,6 +4,7 @@ import { useRef, type ReactNode } from "react";
 import { conditions, gsap, ScrollTrigger, useGSAP, type Conditions } from "./gsap";
 import { heroReveal } from "./effects/hero";
 import { sectionBackgrounds } from "./effects/backgrounds";
+import { introReveal } from "./effects/intro";
 import { workScroll, workTilt } from "./effects/work";
 import { journeyTimeline } from "./effects/journey";
 import { skillsCloud } from "./effects/skills";
@@ -23,6 +24,7 @@ export function PageMotion({ children }: { children: ReactNode }) {
         // Backgrounds go last so their triggers are measured after the Work pin spacing exists.
         const cleanups = [
           heroReveal(el, c),
+          introReveal(el, c),
           workScroll(el, c),
           journeyTimeline(el, c),
           skillsCloud(el, c),
