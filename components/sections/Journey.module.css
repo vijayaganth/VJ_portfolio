@@ -1,0 +1,84 @@
+.inner {
+  padding-block: 120px;
+}
+
+.title {
+  margin-bottom: 64px;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 32px;
+  padding: 29.5px 0 28px; /* 28px + the 1.5px divider */
+}
+
+/* Dividers are elements (not borders) so the motion layer can draw them. */
+.line {
+  display: block;
+  height: 1.5px;
+  background: var(--c-ink);
+}
+
+.row .line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.role {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.company {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.summary {
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+  .inner {
+    padding-block: 80px;
+  }
+
+  .title {
+    margin-bottom: 40px;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 25.5px 0 24px;
+  }
+
+  .role {
+    font-size: 24px;
+  }
+
+  .company,
+  .summary {
+    font-size: 16px;
+  }
+}

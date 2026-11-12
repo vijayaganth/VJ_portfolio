@@ -1,0 +1,28 @@
+.footer {
+  background: var(--c-base);
+}
+
+.inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-block: 36px;
+  font-size: 14px;
+  color: var(--c-muted);
+}
+
+.top {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+}
+
+@media (max-width: 760px) {
+  .inner {
+    flex-wrap: nowrap;
+    padding-block: 24px;
+    font-size: 13px;
+  }
+}

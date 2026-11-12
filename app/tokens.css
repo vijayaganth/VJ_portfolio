@@ -1,0 +1,48 @@
+/* Palette "Electric ocean" – see BUILD_BRIEF.md */
+:root {
+  /* surfaces */
+  --c-base: #06111f;
+  --c-intro: #0c1a3a;
+  --c-work: #081a2e;
+  --c-orb-base: #0e2540;
+  --c-divider: #1e3550;
+
+  /* text */
+  --c-text: #eaf6ff;
+  --c-muted: #9db6cc;
+  --c-body-muted: #c5daea;
+  --c-ink: #06111f;
+  --c-magenta-text: #f08cff;
+
+  /* accents */
+  --c-teal: #14e3c2;
+  --c-blue: #3d7bff;
+  --c-magenta: #e43dff;
+  --c-yellow: #ffc93d;
+
+  /* type (variables set by next/font on <html>) */
+  --font-display: var(--font-space-grotesk), sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+
+  /* layout */
+  --container: 1200px;
+  --gutter: 56px;
+  --tap: 44px;
+  --radius-pill: 999px;
+
+  /* static hero orb (also the fallback for the 3D orb) */
+  --orb-gradient:
+    radial-gradient(circle at 28% 28%, #e43dff 0%, rgba(228, 61, 255, 0) 46%),
+    radial-gradient(circle at 72% 32%, #3d7bff 0%, rgba(61, 123, 255, 0) 50%),
+    radial-gradient(circle at 48% 78%, #14e3c2 0%, rgba(20, 227, 194, 0) 58%),
+    radial-gradient(circle at 62% 62%, #ffc93d 0%, rgba(255, 201, 61, 0) 30%),
+    var(--c-orb-base);
+  --orb-glow: rgba(20, 227, 194, 0.3);
+}
+
+@media (max-width: 760px) {
+  :root {
+    --gutter: 24px;
+  }
+}
