@@ -118,7 +118,7 @@
   }
 }
 
-/* Every role is a card so the 3D tilt reads; the text floats above it in depth. */
+/* Every role is a card so the 3D tilt reads. */
 .detail {
   display: flex;
   flex-direction: column;
@@ -128,14 +128,9 @@
   border-radius: 24px;
   background: color-mix(in srgb, var(--c-text) 22%, transparent);
   box-shadow: 0 16px 32px color-mix(in srgb, var(--c-ink) 8%, transparent);
-  transform-style: preserve-3d;
   transition:
     background 0.3s ease,
     box-shadow 0.3s ease;
-}
-
-.detail > * {
-  transform: translateZ(24px);
 }
 
 .row:not([data-current]) .detail:hover {
@@ -235,8 +230,11 @@
     margin-top: 12px;
   }
 
-  .detail {
+  .depth {
     grid-area: detail;
+  }
+
+  .detail {
     padding: 20px 16px;
     border-radius: 20px;
   }

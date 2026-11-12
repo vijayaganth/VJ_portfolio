@@ -30,10 +30,13 @@ export function Journey() {
                   <span className="label">{job.period}</span>
                 </div>
                 <span className={styles.stop} data-journey-stop aria-hidden="true" />
-                <div className={styles.detail} data-journey-detail data-tilt="soft">
-                  <h3 className={styles.role}>{job.role}</h3>
-                  <span className={styles.company}>{job.company}</span>
-                  <p className={styles.summary}>{job.summary}</p>
+                {/* Two layers so the effects never fight: scroll tilts the outer, the pointer tilts the card. */}
+                <div className={styles.depth} data-journey-detail>
+                  <div className={styles.detail} data-tilt="soft">
+                    <h3 className={styles.role}>{job.role}</h3>
+                    <span className={styles.company}>{job.company}</span>
+                    <p className={styles.summary}>{job.summary}</p>
+                  </div>
                 </div>
               </li>
             ))}

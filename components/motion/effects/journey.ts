@@ -2,7 +2,8 @@ import { gsap, ScrollTrigger, type Conditions } from "../gsap";
 
 /**
  * The timeline rail fills from the top as it scrolls past the reading line, and each stop lights up
- * when the fill reaches it. Role cards slide in as they enter. Reduced motion: rail full, stops lit.
+ * when the fill reaches it. Role cards fade up and lean back slightly in 3D until mid-screen.
+ * Reduced motion: rail full, stops lit, cards flat.
  */
 export function journeyTimeline(root: HTMLElement, c: Conditions) {
   const timeline = root.querySelector<HTMLElement>("[data-journey]");
@@ -26,17 +27,26 @@ export function journeyTimeline(root: HTMLElement, c: Conditions) {
     const stop = row.querySelector<HTMLElement>("[data-journey-stop]")!;
     const detail = row.querySelector<HTMLElement>("[data-journey-detail]")!;
 
-    // Swings in from the rail like a door opening toward you.
+    // Fades up as it enters.
     gsap.from(detail, {
-      x: 48,
-      rotationY: -24,
-      transformPerspective: 900,
-      transformOrigin: "left center",
       opacity: 0,
-      duration: 0.9,
-      ease: "power3.out",
-      scrollTrigger: { trigger: row, start: "top 85%" },
+      y: 24,
+      duration: 0.7,
+      ease: "power2.out",
+      scrollTrigger: { trigger: row, start: "top 90%" },
     });
+
+    // A small 3D lean tied to scroll: bottom edge tipped away as it rises, flat by mid-screen.
+    // Tipping away (negative) only ever foreshortens the card, so it never looks stretched.
+    gsap.fromTo(
+      detail,
+      { rotationX: -10, transformPerspective: 1200, transformOrigin: "center top" },
+      {
+        rotationX: 0,
+        ease: "none",
+        scrollTrigger: { trigger: row, start: "top bottom", end: "top 55%", scrub: 0.5 },
+      },
+    );
 
     return ScrollTrigger.create({
       trigger: stop,
