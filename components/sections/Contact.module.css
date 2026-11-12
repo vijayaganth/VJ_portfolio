@@ -1,67 +1,272 @@
+.section {
+  position: relative;
+  overflow: clip;
+}
+
+/* A faint dot grid behind the headline, fading out toward the edges. */
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(color-mix(in srgb, var(--c-ink) 14%, transparent) 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 70% 60% at 30% 45%, var(--c-ink), transparent);
+  pointer-events: none;
+}
+
 .inner {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 56px;
-  padding-block: 140px;
+  gap: 64px;
+  padding-block: 160px 120px;
 }
 
 .title {
-  max-width: 980px;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 120px;
   letter-spacing: -0.045em;
-  line-height: 0.98;
+  line-height: 1.02;
 }
 
-.links {
+.line {
+  display: block;
+}
+
+/* "Let's build it." sits on an ink highlight that the motion layer wipes in. */
+.answer {
+  position: relative;
+  display: inline-block;
+  margin-top: 0.06em;
+  padding: 0 0.16em 0.06em;
+}
+
+.mark {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.14em;
+  background: var(--c-ink);
+  transform-origin: left center;
+}
+
+.answerText {
+  position: relative;
+  color: var(--c-teal);
+}
+
+.actions {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 16px;
-  align-items: flex-start;
+}
+
+.mail,
+.linkedin {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  min-height: var(--tap);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-weight: 500;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.mail:hover,
+.linkedin:hover {
+  opacity: 1;
 }
 
 .mail {
   max-width: 100%;
-  padding-bottom: 4px;
-  border-bottom: 3px solid var(--c-ink);
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 40px;
+  padding: 14px 14px 14px 32px;
+  background: var(--c-ink);
+  color: var(--c-text);
+  font-size: 28px;
   letter-spacing: -0.02em;
-  overflow-wrap: anywhere;
+  box-shadow: 0 20px 40px color-mix(in srgb, var(--c-ink) 22%, transparent);
+}
+
+.mail:hover {
+  box-shadow: 0 28px 56px color-mix(in srgb, var(--c-ink) 32%, transparent);
+}
+
+.address {
+  min-width: 0;
 }
 
 .linkedin {
+  padding: 14px 14px 14px 28px;
+  border: 2px solid var(--c-ink);
+  font-size: 22px;
+}
+
+.linkedin:hover {
+  background: var(--c-ink);
+  color: var(--c-text);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--c-teal);
+  color: var(--c-ink);
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+.linkedin .icon {
+  width: 44px;
+  height: 44px;
+  background: var(--c-ink);
+  color: var(--c-teal);
+}
+
+.linkedin:hover .icon {
+  background: var(--c-teal);
+  color: var(--c-ink);
+}
+
+.mail:hover .icon {
+  background: var(--c-yellow);
+}
+
+.arrow {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: rotate 0.35s ease;
+}
+
+.mail:hover .arrow,
+.linkedin:hover .arrow {
+  rotate: 45deg;
+}
+
+/* Ink band at the foot of the section; it meets the footer's navy. */
+.band {
+  position: relative;
+  padding-block: 28px;
+  background: var(--c-ink);
+  color: var(--c-teal);
+  overflow: hidden;
+}
+
+/* Static (no JS, reduced motion): one row, cut off at the edge. */
+.track {
+  display: flex;
+  width: max-content;
+}
+
+.run {
+  display: flex;
+}
+
+.phrase {
   display: inline-flex;
   align-items: center;
-  min-height: var(--tap);
-  font-size: 20px;
-  font-weight: 500;
+  gap: 40px;
+  padding-right: 40px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 56px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Every other phrase is outlined. */
+.phrase:nth-child(even) {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--c-teal);
+}
+
+.sep {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--c-yellow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow {
+    transition: none;
+  }
 }
 
 @media (max-width: 760px) {
   .inner {
     gap: 40px;
-    padding-block: 80px;
+    padding-block: 96px 72px;
   }
 
   .title {
-    font-size: 54px;
-    line-height: 1;
+    font-size: 50px;
+    line-height: 1.04;
   }
 
-  .links {
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .mail,
+  .linkedin {
+    justify-content: space-between;
     gap: 12px;
   }
 
   .mail {
-    border-bottom-width: 2px;
-    font-size: 20px;
+    padding: 10px 10px 10px 22px;
+    font-size: 19px;
     letter-spacing: -0.01em;
+    line-height: 1.25;
   }
 
   .linkedin {
+    padding: 10px 10px 10px 22px;
     font-size: 18px;
+  }
+
+  .icon,
+  .linkedin .icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .arrow {
+    width: 20px;
+    height: 20px;
+  }
+
+  .band {
+    padding-block: 18px;
+  }
+
+  .phrase {
+    gap: 24px;
+    padding-right: 24px;
+    font-size: 32px;
+  }
+
+  .sep {
+    width: 10px;
+    height: 10px;
   }
 }

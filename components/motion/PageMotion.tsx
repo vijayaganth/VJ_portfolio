@@ -7,6 +7,7 @@ import { sectionBackgrounds } from "./effects/backgrounds";
 import { workScroll, workTilt } from "./effects/work";
 import { journeyTimeline } from "./effects/journey";
 import { skillsCloud } from "./effects/skills";
+import { contactReveal } from "./effects/contact";
 
 /** Attaches all page motion to the static markup through its data-* hooks. */
 export function PageMotion({ children }: { children: ReactNode }) {
@@ -25,6 +26,7 @@ export function PageMotion({ children }: { children: ReactNode }) {
           workScroll(el, c),
           journeyTimeline(el, c),
           skillsCloud(el, c),
+          contactReveal(el, c),
           sectionBackgrounds(el, c),
         ];
         return () => cleanups.forEach((fn) => fn?.());
