@@ -1,6 +1,15 @@
 // All copy, verbatim from design/*.reference.html. Do not edit without Vijayaganth.
 
+import type { StaticImageData } from "next/image";
+// Real screens, captured from each app running locally (see assets/work/).
+import paadamShot from "@/assets/work/paadam.webp";
+import remoShot from "@/assets/work/remo.webp";
+import atsShot from "@/assets/work/ats.webp";
+
 export type Accent = "teal" | "blue" | "magenta" | "yellow";
+
+/** "browser" frames a web app screen; "phone" frames a mobile screen. */
+export type Shot = { src: StaticImageData; alt: string; frame: "browser" | "phone" };
 
 export const site = {
   name: "Vijayaganth",
@@ -43,6 +52,7 @@ export const site = {
           "AI-powered SaaS that generates syllabus-aligned weekly worksheets and exam papers for CBSE and Tamil Nadu State Board schools.",
         tags: ["Next.js", "TypeScript", "Claude / OpenAI APIs"],
         accent: "teal",
+        shot: { src: paadamShot, alt: "Paadam worksheet builder: textbook, chapters and a 25-mark blueprint preview", frame: "browser" },
       },
       {
         index: "02",
@@ -52,6 +62,7 @@ export const site = {
           "A home TV remote for iPhone and Google TV. No ads, with watch history and a doorbell pause.",
         tags: ["Mobile", "iOS", "Google TV"],
         accent: "blue",
+        shot: { src: remoShot, alt: "Remo iPhone remote: D-pad, back, home, pause and volume controls", frame: "phone" },
       },
       {
         index: "03",
@@ -61,6 +72,7 @@ export const site = {
           "A full-stack applicant tracking system for an Indian HR client, with role-based access. I owned the Figma UI/UX, system architecture and a 13-week milestone plan.",
         tags: ["React", "NestJS", "PostgreSQL"],
         accent: "magenta",
+        shot: { src: atsShot, alt: "ATS job listing: jobs with client, status, positions and submissions", frame: "browser" },
       },
     ] as {
       index: string;
@@ -69,6 +81,7 @@ export const site = {
       description: string;
       tags: string[];
       accent: Accent;
+      shot: Shot;
     }[],
   },
 

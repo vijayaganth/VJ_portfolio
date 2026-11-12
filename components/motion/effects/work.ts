@@ -21,7 +21,7 @@ export function workScroll(root: HTMLElement, c: Conditions) {
   track.dataset.horizontal = "";
   const distance = () => Math.max(0, track.scrollWidth - track.clientWidth);
 
-  gsap.to(track, {
+  const slide = gsap.to(track, {
     x: () => -distance(),
     ease: "none",
     scrollTrigger: {
@@ -33,6 +33,25 @@ export function workScroll(root: HTMLElement, c: Conditions) {
       scrub: 1,
       invalidateOnRefresh: true,
     },
+  });
+
+  // Each framed screen drifts against the slide, so it reads as a layer behind the card face.
+  track.querySelectorAll<HTMLElement>("[data-work-shot]").forEach((shot) => {
+    gsap.fromTo(
+      shot,
+      { xPercent: 6 },
+      {
+        xPercent: -6,
+        ease: "none",
+        scrollTrigger: {
+          trigger: shot.closest("article"),
+          containerAnimation: slide,
+          start: "left right",
+          end: "right left",
+          scrub: true,
+        },
+      },
+    );
   });
 
   return () => {
