@@ -5,6 +5,8 @@ import styles from "./Skills.module.css";
 
 export function Skills() {
   const { skills } = site;
+  // "Bachelor of Computer Science, University of Madras, Chennai." → degree / place, same words.
+  const [degree, ...place] = skills.education.split(", ");
   return (
     <Section id="skills" bg="base" className={styles.section}>
       <div className={`container ${styles.inner}`}>
@@ -24,10 +26,10 @@ export function Skills() {
           ))}
         </div>
 
-        <div className={styles.layout} aria-hidden="true">
+        <div className={styles.layout}>
           <div className={styles.side}>
             {/* Hover or tap a group to light up its skills in the cloud. */}
-            <ul className={styles.legend}>
+            <ul className={styles.legend} aria-hidden="true">
               {skills.groups.map((group) => (
                 <li key={group.name}>
                   <button
@@ -43,9 +45,23 @@ export function Skills() {
                 </li>
               ))}
             </ul>
+
+            <p className={styles.education}>
+              <svg className={styles.cap} viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 4 2 9l10 5 10-5-10-5Z" />
+                <path d="M6 11.2V16c0 1.4 2.7 3 6 3s6-1.6 6-3v-4.8" />
+                <path d="M22 9v6" />
+              </svg>
+              <span>
+                <strong className={styles.degree}>{degree}</strong>
+                {/* The comma is read aloud but hidden: the place sits on its own line. */}
+                <span className={styles.srOnly}>, </span>
+                <span className={styles.place}>{place.join(", ")}</span>
+              </span>
+            </p>
           </div>
 
-          <div className={styles.stage}>
+          <div className={styles.stage} aria-hidden="true">
             <div className={styles.glow} />
             <ul className={styles.cloud} data-skills-cloud>
               {skills.groups.flatMap((group) =>
@@ -64,8 +80,6 @@ export function Skills() {
             </ul>
           </div>
         </div>
-
-        <p className={styles.education}>{skills.education}</p>
       </div>
     </Section>
   );
