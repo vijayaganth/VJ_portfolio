@@ -1,4 +1,4 @@
-import { gsap, type Conditions } from "../gsap";
+import { gsap, ScrollTrigger, type Conditions } from "../gsap";
 
 /** Desktop: pin the Work section and move the cards sideways as you scroll down. */
 export function workScroll(root: HTMLElement, c: Conditions) {
@@ -54,7 +54,18 @@ export function workScroll(root: HTMLElement, c: Conditions) {
     );
   });
 
+  // The pin length is measured from the row's width. Re-measure when that width changes without a
+  // window resize (late layout, style changes), or the pin ends before the last card is in view.
+  let width = track.scrollWidth;
+  const resized = new ResizeObserver(() => {
+    if (track.scrollWidth === width) return;
+    width = track.scrollWidth;
+    ScrollTrigger.refresh();
+  });
+  Array.from(track.children).forEach((card) => resized.observe(card));
+
   return () => {
+    resized.disconnect();
     delete track.dataset.horizontal;
   };
 }
