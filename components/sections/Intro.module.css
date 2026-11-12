@@ -1,0 +1,32 @@
+.inner {
+  padding-block: 140px;
+}
+
+.statement {
+  max-width: 1040px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 64px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-wrap: pretty;
+}
+
+.magenta {
+  color: var(--c-magenta-text);
+}
+
+.yellow {
+  color: var(--c-yellow);
+}
+
+@media (max-width: 760px) {
+  .inner {
+    padding-block: 80px;
+  }
+
+  .statement {
+    font-size: 30px;
+    line-height: 1.15;
+  }
+}

@@ -16,7 +16,7 @@ This plan says **how** we build it and **who** (which agent / skill) does each p
 | Motion | `gsap` + `@gsap/react` (`useGSAP`), plugins: ScrollTrigger, SplitText | Brief; all plugins free |
 | Smooth scroll | `lenis` (official package), driven by `gsap.ticker`, `ScrollTrigger.update` on scroll | Single RAF loop, no double ticking |
 | 3D | `three` + `@react-three/fiber` (+ `@react-three/drei` only if a helper is genuinely needed) | Brief; custom GLSL shader orb, no models/textures |
-| Dev tooling | threejs-devtools-mcp bridge (dev only, dynamic import behind `process.env.NODE_ENV === 'development'`) | Live orb tuning; must not ship |
+| Dev tooling | threejs-devtools-mcp, via its proxy on :9222 (injects the bridge; no app code) | Live orb tuning; nothing ships |
 | Lint / format | ESLint (next config) + Prettier | Standard |
 | Verification | Built-in browser pane screenshots at 1440 and 390; Playwright screenshot script (`pnpm shots`); Lighthouse CLI (`pnpm lh`) | Agents can self-verify against the references |
 | Hosting | Vercel (preview per branch, prod on `main`) | Brief |
@@ -42,7 +42,6 @@ components/
   orb/OrbCanvas.tsx   R3F <Canvas>, lazy, client-only
   orb/Orb.tsx         mesh + ShaderMaterial
   orb/orb.vert.glsl  orb.frag.glsl
-  orb/DevBridge.tsx   dev-only devtools bridge
 content/site.ts       all copy, links, projects, jobs, skill groups (verbatim from references)
 scripts/shots.ts      Playwright: screenshot localhost at 1440 & 390 vs design/
 ```

@@ -1,0 +1,67 @@
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  padding-block: 140px;
+}
+
+.title {
+  max-width: 980px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 120px;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.mail {
+  max-width: 100%;
+  padding-bottom: 4px;
+  border-bottom: 3px solid var(--c-ink);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 40px;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.linkedin {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+@media (max-width: 760px) {
+  .inner {
+    gap: 40px;
+    padding-block: 80px;
+  }
+
+  .title {
+    font-size: 54px;
+    line-height: 1;
+  }
+
+  .links {
+    gap: 12px;
+  }
+
+  .mail {
+    border-bottom-width: 2px;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .linkedin {
+    font-size: 18px;
+  }
+}
