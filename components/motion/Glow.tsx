@@ -12,10 +12,9 @@ type Mote = {
   life: number;
   max: number;
   sprite: HTMLCanvasElement;
-  spark: boolean;
 };
 
-const MAX_MOTES = 260;
+const MAX_MOTES = 120;
 
 /** "#14e3c2" → "20, 227, 194" for rgba(). */
 function rgb(hex: string) {
@@ -23,16 +22,16 @@ function rgb(hex: string) {
   return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;
 }
 
-/** A soft round glow drawn once, then stamped with drawImage (far cheaper than a gradient per mote). */
+/** A small bright dot with a thin halo, drawn once, then stamped with drawImage. */
 function sprite(color: string, core: string) {
-  const size = 128;
+  const size = 32;
   const c = document.createElement("canvas");
   c.width = c.height = size;
   const ctx = c.getContext("2d")!;
   const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
   g.addColorStop(0, `rgba(${core}, 1)`);
-  g.addColorStop(0.18, `rgba(${color}, 0.9)`);
-  g.addColorStop(0.45, `rgba(${color}, 0.3)`);
+  g.addColorStop(0.22, `rgba(${color}, 1)`);
+  g.addColorStop(0.4, `rgba(${color}, 0.25)`);
   g.addColorStop(1, `rgba(${color}, 0)`);
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, size, size);
@@ -40,10 +39,10 @@ function sprite(color: string, core: string) {
 }
 
 /**
- * Bioluminescent cursor: wherever the mouse goes, teal and blue light blooms and fades, with small
- * sparks like glowing moss, and a click sends a ring of light outward. The light stays where it was
- * left on the page as you scroll. Mouse (fine pointer) only, never with reduced motion. Drawn on one
- * fixed canvas that only runs while something is glowing.
+ * Bioluminescent cursor, kept light: the mouse leaves a sparse trail of small teal and blue dots that
+ * twinkle and fade, and a click sends a small ring of dots outward. The dots stay where they were left
+ * on the page as you scroll. Mouse (fine pointer) only, never with reduced motion. Drawn on one fixed
+ * canvas that only runs while a dot is alive.
  */
 export function Glow() {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -59,7 +58,7 @@ export function Glow() {
     const teal = rgb(css.getPropertyValue("--c-teal"));
     const blue = rgb(css.getPropertyValue("--c-blue"));
     const white = rgb(css.getPropertyValue("--c-text"));
-    const sprites = { teal: sprite(teal, teal), blue: sprite(blue, blue), spark: sprite(teal, white) };
+    const sprites = { teal: sprite(teal, white), blue: sprite(blue, white) };
 
     let dpr = 1;
     const resize = () => {
@@ -70,9 +69,9 @@ export function Glow() {
     resize();
 
     const motes: Mote[] = [];
-    const pointer = { x: -999, y: -999, inside: false };
+    const pointer = { x: -999, y: -999 };
     let last: { x: number; y: number } | null = null;
-    let halo = 0; // the pool of light right under the cursor, 0..1
+    let travel = 0; // distance moved since the last dot
     let dim = 1; // softer over the light (yellow, teal) sections
     let raf = 0;
     let then = 0;
@@ -83,46 +82,24 @@ export function Glow() {
       motes.push({ ...m, life: m.max });
     };
 
-    const bloom = (x: number, y: number) => {
-      const spread = 12;
+    const dot = (x: number, y: number) =>
       add({
-        x: x + (Math.random() - 0.5) * spread,
-        y: y + (Math.random() - 0.5) * spread,
-        vx: (Math.random() - 0.5) * 18,
-        vy: (Math.random() - 0.5) * 18 - 6,
-        r: 22 + Math.random() * 30,
-        max: 1.1 + Math.random() * 0.9,
+        x: x + (Math.random() - 0.5) * 14,
+        y: y + (Math.random() - 0.5) * 14,
+        vx: (Math.random() - 0.5) * 12,
+        vy: -6 - Math.random() * 12,
+        r: 2.5 + Math.random() * 2.5,
+        max: 0.7 + Math.random() * 0.6,
         sprite: Math.random() < 0.6 ? sprites.teal : sprites.blue,
-        spark: false,
       });
-      if (Math.random() < 0.35) {
-        add({
-          x: x + (Math.random() - 0.5) * 50,
-          y: y + (Math.random() - 0.5) * 50,
-          vx: (Math.random() - 0.5) * 10,
-          vy: -8 - Math.random() * 14,
-          r: 3 + Math.random() * 4,
-          max: 0.8 + Math.random() * 1.2,
-          sprite: sprites.spark,
-          spark: true,
-        });
-      }
-    };
 
     const frame = (now: number) => {
       const dt = Math.min((now - then) / 1000 || 0.016, 0.05);
       then = now;
-      halo += ((pointer.inside ? 1 : 0) - halo) * Math.min(1, dt * 4);
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       ctx.globalCompositeOperation = "lighter";
-
-      if (halo > 0.01) {
-        const r = 150;
-        ctx.globalAlpha = 0.16 * halo * dim;
-        ctx.drawImage(sprites.teal, pointer.x - r, pointer.y - r, r * 2, r * 2);
-      }
 
       for (let i = motes.length - 1; i >= 0; i--) {
         const m = motes[i];
@@ -134,15 +111,14 @@ export function Glow() {
         m.x += m.vx * dt;
         m.y += m.vy * dt;
         const t = m.life / m.max; // 1 → 0
-        // Sparks twinkle; blooms swell a little as they fade.
-        const alpha = m.spark ? t * (0.6 + 0.4 * Math.sin(now / 70 + m.x)) : t * t * 0.7;
-        const size = m.spark ? m.r : m.r * (1 + (1 - t) * 0.7);
-        ctx.globalAlpha = alpha * dim;
+        // Fades out while it twinkles; the sprite is 4× the dot so its halo fits.
+        ctx.globalAlpha = t * (0.65 + 0.35 * Math.sin(now / 60 + m.x)) * dim;
+        const size = m.r * 2;
         ctx.drawImage(m.sprite, m.x - size, m.y - size, size * 2, size * 2);
       }
 
       ctx.globalAlpha = 1;
-      raf = motes.length || halo > 0.01 ? requestAnimationFrame(frame) : 0;
+      raf = motes.length ? requestAnimationFrame(frame) : 0;
     };
     const wake = () => {
       if (raf) return;
@@ -155,11 +131,14 @@ export function Glow() {
       if (e.pointerType !== "mouse") return;
       pointer.x = e.clientX;
       pointer.y = e.clientY;
-      pointer.inside = true;
-      // Trail: a bloom every ~10px along the path, so fast moves leave an unbroken line of light.
+      // Sparse trail: one dot per ~18px moved, placed along the path.
       const from = last ?? pointer;
-      const steps = Math.min(8, Math.ceil(Math.hypot(pointer.x - from.x, pointer.y - from.y) / 10));
-      for (let s = 1; s <= steps; s++) bloom(from.x + ((pointer.x - from.x) * s) / steps, from.y + ((pointer.y - from.y) * s) / steps);
+      const dx = pointer.x - from.x;
+      const dy = pointer.y - from.y;
+      const dist = Math.hypot(dx, dy);
+      const gap = 18;
+      for (let d = gap - travel; d <= dist; d += gap) dot(from.x + (dx * d) / dist, from.y + (dy * d) / dist);
+      travel = (travel + dist) % gap;
       last = { x: pointer.x, y: pointer.y };
       // What is under the cursor (the canvas ignores the pointer), checked at most once a frame.
       if (!probe) {
@@ -172,30 +151,28 @@ export function Glow() {
       wake();
     };
 
-    // A click sends a ring of light outward, like a footstep on the forest floor.
+    // A click sends a small ring of dots outward, like a footstep on the forest floor.
     const down = (e: PointerEvent) => {
       if (e.pointerType !== "mouse") return;
-      const n = 18;
+      const n = 10;
       for (let i = 0; i < n; i++) {
         const a = (i / n) * Math.PI * 2;
-        const speed = 170 + Math.random() * 40;
         add({
           x: e.clientX,
           y: e.clientY,
-          vx: Math.cos(a) * speed,
-          vy: Math.sin(a) * speed,
-          r: 16 + Math.random() * 10,
-          max: 0.75,
+          vx: Math.cos(a) * 80,
+          vy: Math.sin(a) * 80,
+          r: 3,
+          max: 0.6,
           sprite: i % 2 ? sprites.blue : sprites.teal,
-          spark: false,
         });
       }
       wake();
     };
 
     const leave = () => {
-      pointer.inside = false;
       last = null;
+      travel = 0;
     };
 
     // Light stays where it was left on the page: shift it with the scroll.
