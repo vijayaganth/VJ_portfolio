@@ -1,3 +1,8 @@
+/* Cards swing in with perspective and briefly reach past the viewport edge. */
+.section {
+  overflow: clip;
+}
+
 .inner {
   padding-block: 120px;
 }
@@ -113,24 +118,34 @@
   }
 }
 
+/* Every role is a card so the 3D tilt reads; the text floats above it in depth. */
 .detail {
   display: flex;
   flex-direction: column;
   gap: 8px;
   padding: 28px 32px;
+  border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   border-radius: 24px;
+  background: color-mix(in srgb, var(--c-text) 22%, transparent);
+  box-shadow: 0 16px 32px color-mix(in srgb, var(--c-ink) 8%, transparent);
+  transform-style: preserve-3d;
   transition:
     background 0.3s ease,
-    translate 0.3s ease;
+    box-shadow 0.3s ease;
+}
+
+.detail > * {
+  transform: translateZ(24px);
 }
 
 .row:not([data-current]) .detail:hover {
-  background: color-mix(in srgb, var(--c-ink) 6%, transparent);
-  translate: 6px 0;
+  background: color-mix(in srgb, var(--c-text) 38%, transparent);
+  box-shadow: 0 24px 48px color-mix(in srgb, var(--c-ink) 16%, transparent);
 }
 
 /* Current role: an ink card on the yellow. */
 .row[data-current] .detail {
+  border-color: transparent;
   background: var(--c-ink);
   color: var(--c-text);
   box-shadow: 0 24px 48px color-mix(in srgb, var(--c-ink) 25%, transparent);

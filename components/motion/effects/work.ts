@@ -70,12 +70,16 @@ export function workScroll(root: HTMLElement, c: Conditions) {
   };
 }
 
-/** Cards tilt toward the pointer in 3D. Desktop with a fine pointer only. */
+/**
+ * Cards tilt toward the pointer in 3D. Desktop with a fine pointer only.
+ * Applies to every `[data-tilt]` on the page; `data-tilt="soft"` (wide Journey cards) tilts less.
+ */
 export function workTilt(root: HTMLElement) {
   const cards = root.querySelectorAll<HTMLElement>("[data-tilt]");
   const cleanups: (() => void)[] = [];
 
   cards.forEach((card) => {
+    const max = card.dataset.tilt === "soft" ? 8 : 16; // degrees across the full card
     gsap.set(card, { transformPerspective: 900 });
     const rotX = gsap.quickTo(card, "rotationX", { duration: 0.5, ease: "power3.out" });
     const rotY = gsap.quickTo(card, "rotationY", { duration: 0.5, ease: "power3.out" });
@@ -84,8 +88,8 @@ export function workTilt(root: HTMLElement) {
       const r = card.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width - 0.5;
       const py = (e.clientY - r.top) / r.height - 0.5;
-      rotY(px * 16);
-      rotX(-py * 16);
+      rotY(px * max);
+      rotX(-py * max);
     };
     const leave = () => {
       rotX(0);

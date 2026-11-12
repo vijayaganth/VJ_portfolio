@@ -26,10 +26,14 @@ export function journeyTimeline(root: HTMLElement, c: Conditions) {
     const stop = row.querySelector<HTMLElement>("[data-journey-stop]")!;
     const detail = row.querySelector<HTMLElement>("[data-journey-detail]")!;
 
+    // Swings in from the rail like a door opening toward you.
     gsap.from(detail, {
       x: 48,
+      rotationY: -24,
+      transformPerspective: 900,
+      transformOrigin: "left center",
       opacity: 0,
-      duration: 0.8,
+      duration: 0.9,
       ease: "power3.out",
       scrollTrigger: { trigger: row, start: "top 85%" },
     });

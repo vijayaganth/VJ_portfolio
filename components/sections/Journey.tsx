@@ -7,7 +7,7 @@ export function Journey() {
   // Newest role first.
   const jobs = [...journey.jobs].reverse();
   return (
-    <Section id="journey" bg="yellow" surface="light">
+    <Section id="journey" bg="yellow" surface="light" className={styles.section}>
       <div className={`container ${styles.inner}`}>
         <h2 className={`sectionTitle ${styles.title}`}>{journey.title}</h2>
         <div className={styles.timeline} data-journey>
@@ -30,7 +30,7 @@ export function Journey() {
                   <span className="label">{job.period}</span>
                 </div>
                 <span className={styles.stop} data-journey-stop aria-hidden="true" />
-                <div className={styles.detail} data-journey-detail>
+                <div className={styles.detail} data-journey-detail data-tilt="soft">
                   <h3 className={styles.role}>{job.role}</h3>
                   <span className={styles.company}>{job.company}</span>
                   <p className={styles.summary}>{job.summary}</p>
