@@ -6,6 +6,34 @@
   margin-bottom: 64px;
 }
 
+/* Columns: when (year + period) | stop on the rail | detail. */
+.timeline {
+  --when: 240px;
+  --stop-col: 64px;
+  position: relative;
+}
+
+.rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--when) + var(--stop-col) / 2 - 1px);
+  width: 2px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--c-ink) 15%, transparent);
+  /* Fades in above the first stop and out below the last, instead of ending in hard edges. */
+  mask-image: linear-gradient(to bottom, transparent, var(--c-ink) 48px, var(--c-ink) calc(100% - 160px), transparent);
+}
+
+/* Full by default (no JS, reduced motion); the motion layer scrubs it from 0. */
+.fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--c-ink);
+  transform-origin: top center;
+}
+
 .list {
   margin: 0;
   padding: 0;
@@ -13,31 +41,99 @@
 }
 
 .row {
-  position: relative;
   display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 32px;
-  padding: 29.5px 0 28px; /* 28px + the 1.5px divider */
+  grid-template-columns: var(--when) var(--stop-col) 1fr;
+  align-items: start;
+  padding-block: 12px;
 }
 
-/* Dividers are elements (not borders) so the motion layer can draw them. */
-.line {
-  display: block;
-  height: 1.5px;
+.when {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 26px;
+}
+
+.year {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 72px;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--c-ink);
+}
+
+.row[data-current] .year {
+  color: var(--c-ink);
+}
+
+.stop {
+  position: relative;
+  justify-self: center;
+  width: 16px;
+  height: 16px;
+  margin-top: 40px;
+  border: 2px solid var(--c-ink);
+  border-radius: 50%;
   background: var(--c-ink);
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
 }
 
-.row .line {
+/* With motion on, stops are hollow until the fill reaches them. */
+[data-journey-motion] .stop {
+  background: var(--c-yellow);
+  transform: scale(0.75);
+}
+
+[data-journey-motion] .stop[data-lit] {
+  background: var(--c-ink);
+  transform: scale(1);
+}
+
+.row[data-current] .stop::after {
+  content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset: -2px;
+  border-radius: 50%;
+  border: 2px solid var(--c-ink);
+  animation: ring 2.2s ease-out infinite;
+}
+
+@keyframes ring {
+  from {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.6);
+  }
 }
 
 .detail {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 28px 32px;
+  border-radius: 24px;
+  transition:
+    background 0.3s ease,
+    translate 0.3s ease;
+}
+
+.row:not([data-current]) .detail:hover {
+  background: color-mix(in srgb, var(--c-ink) 6%, transparent);
+  translate: 6px 0;
+}
+
+/* Current role: an ink card on the yellow. */
+.row[data-current] .detail {
+  background: var(--c-ink);
+  color: var(--c-text);
+  box-shadow: 0 24px 48px color-mix(in srgb, var(--c-ink) 25%, transparent);
 }
 
 .role {
@@ -49,13 +145,35 @@
 }
 
 .company {
-  font-size: 18px;
+  font-family: var(--font-mono);
   font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.row[data-current] .company {
+  color: var(--c-yellow);
 }
 
 .summary {
+  max-width: 62ch;
   font-size: 18px;
   line-height: 1.5;
+}
+
+.row[data-current] .summary {
+  color: var(--c-body-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row[data-current] .stop::after {
+    animation: none;
+  }
+
+  .detail {
+    transition: none;
+  }
 }
 
 @media (max-width: 760px) {
@@ -67,17 +185,59 @@
     margin-bottom: 40px;
   }
 
+  /* Rail on the left; year and period sit above the detail. */
+  .timeline {
+    --stop-col: 32px;
+  }
+
+  .rail {
+    left: calc(var(--stop-col) / 2 - 1px);
+  }
+
   .row {
-    grid-template-columns: 1fr;
-    gap: 8px;
-    padding: 25.5px 0 24px;
+    grid-template-columns: var(--stop-col) 1fr;
+    grid-template-areas:
+      "stop when"
+      ". detail";
+    row-gap: 12px;
+    padding-block: 16px;
+  }
+
+  .when {
+    grid-area: when;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 12px;
+    padding: 0 0 0 16px;
+  }
+
+  .year {
+    font-size: 44px;
+  }
+
+  .stop {
+    grid-area: stop;
+    margin-top: 12px;
+  }
+
+  .detail {
+    grid-area: detail;
+    padding: 20px 16px;
+    border-radius: 20px;
+  }
+
+  .row[data-current] .detail {
+    padding: 22px 20px;
   }
 
   .role {
     font-size: 24px;
   }
 
-  .company,
+  .company {
+    font-size: 12px;
+  }
+
   .summary {
     font-size: 16px;
   }

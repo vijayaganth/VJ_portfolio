@@ -22,7 +22,7 @@ Load `portfolio-tokens` first.
    | Hero orb slot | `<div data-orb-slot>` containing the CSS gradient orb from the reference (it becomes the fallback) |
    | Any section | `data-bg="<token name>"` on `<Section>` |
    | Work track | `data-work-track` on the card list, `data-tilt` on each card |
-   | Journey | `data-journey-line` on each divider (render divider as its own element, not a border, so it can scale) |
+   | Journey | `data-journey` timeline, `data-journey-fill` rail fill, `data-journey-row` / `-stop` / `-detail` per role (rail and stops are elements, not borders, so they can scale) |
    | Skills | `data-pill` on each pill |
 6. **Check** – `pnpm lint && pnpm build`, then hand off to `visual-qa`.
 

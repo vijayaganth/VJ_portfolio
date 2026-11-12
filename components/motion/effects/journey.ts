@@ -1,15 +1,50 @@
-import { gsap, type Conditions } from "../gsap";
+import { gsap, ScrollTrigger, type Conditions } from "../gsap";
 
-/** Each divider draws left to right as it scrolls into view. Reduced motion: lines stay drawn. */
-export function journeyLines(root: HTMLElement, c: Conditions) {
-  if (c.reduce) return;
+/**
+ * The timeline rail fills from the top as it scrolls past the reading line, and each stop lights up
+ * when the fill reaches it. Role cards slide in as they enter. Reduced motion: rail full, stops lit.
+ */
+export function journeyTimeline(root: HTMLElement, c: Conditions) {
+  const timeline = root.querySelector<HTMLElement>("[data-journey]");
+  const fill = root.querySelector<HTMLElement>("[data-journey-fill]");
+  if (!timeline || !fill || c.reduce) return;
 
-  root.querySelectorAll<HTMLElement>("[data-journey-line]").forEach((line) => {
-    gsap.from(line, {
-      scaleX: 0,
-      transformOrigin: "left center",
+  const line = "65%"; // where the fill's tip sits in the viewport
+  timeline.dataset.journeyMotion = "";
+
+  gsap.fromTo(
+    fill,
+    { scaleY: 0 },
+    {
+      scaleY: 1,
       ease: "none",
-      scrollTrigger: { trigger: line, start: "top 90%", end: "top 60%", scrub: true },
+      scrollTrigger: { trigger: timeline, start: `top ${line}`, end: `bottom ${line}`, scrub: 0.4 },
+    },
+  );
+
+  const triggers = Array.from(timeline.querySelectorAll<HTMLElement>("[data-journey-row]")).map((row) => {
+    const stop = row.querySelector<HTMLElement>("[data-journey-stop]")!;
+    const detail = row.querySelector<HTMLElement>("[data-journey-detail]")!;
+
+    gsap.from(detail, {
+      x: 48,
+      opacity: 0,
+      duration: 0.8,
+      ease: "power3.out",
+      scrollTrigger: { trigger: row, start: "top 85%" },
+    });
+
+    return ScrollTrigger.create({
+      trigger: stop,
+      start: `center ${line}`,
+      // Lit once the fill passes, and stays lit below it; unlit again only when scrolling back above.
+      onEnter: () => (stop.dataset.lit = ""),
+      onLeaveBack: () => delete stop.dataset.lit,
     });
   });
+
+  return () => {
+    delete timeline.dataset.journeyMotion;
+    triggers.forEach((t) => delete (t.trigger as HTMLElement).dataset.lit);
+  };
 }

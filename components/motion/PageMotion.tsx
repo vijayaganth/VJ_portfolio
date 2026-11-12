@@ -5,7 +5,7 @@ import { conditions, gsap, ScrollTrigger, useGSAP, type Conditions } from "./gsa
 import { heroReveal } from "./effects/hero";
 import { sectionBackgrounds } from "./effects/backgrounds";
 import { workScroll, workTilt } from "./effects/work";
-import { journeyLines } from "./effects/journey";
+import { journeyTimeline } from "./effects/journey";
 import { skillPills } from "./effects/skills";
 
 /** Attaches all page motion to the static markup through its data-* hooks. */
@@ -23,7 +23,7 @@ export function PageMotion({ children }: { children: ReactNode }) {
         const cleanups = [
           heroReveal(el, c),
           workScroll(el, c),
-          journeyLines(el, c),
+          journeyTimeline(el, c),
           skillPills(el, c),
           sectionBackgrounds(el, c),
         ];
