@@ -4,8 +4,8 @@ import { orbits, orbitPoint } from "@/components/sections/orbit";
 /**
  * H1 reveals line by line. The eyebrow, body and cue are visible from first paint (the body is the
  * LCP element), so they only slide into place. The orbit rings draw in around the orb and their dots
- * travel the rings, passing behind the orb on the far half. Scrolling away, the copy lifts and fades
- * a little faster than the orb, so the two separate in depth.
+ * travel the rings, passing behind the orb on the far half. The hero scrolls away as it is: moving the
+ * orb on scroll read as a jerk while the page background changes colour behind it.
  * Reduced motion: the H1 fades, nothing moves; the dots rest on the near half of their rings.
  */
 export function heroReveal(root: HTMLElement, c: Conditions) {
@@ -37,8 +37,7 @@ export function heroReveal(root: HTMLElement, c: Conditions) {
     delay: 0.2,
   });
 
-  const cleanups = [orbitDots(root), scrollAway(root, c)];
-  return () => cleanups.forEach((fn) => fn?.());
+  return orbitDots(root);
 }
 
 /** Rings draw in, then each dot circles its ring; on the far half it drops behind the orb. */
@@ -85,16 +84,4 @@ function orbitDots(root: HTMLElement) {
     io.disconnect();
     dots.forEach((dot) => (dot.style.zIndex = ""));
   };
-}
-
-/** Copy lifts and fades faster than the orb as the hero scrolls away. */
-function scrollAway(root: HTMLElement, c: Conditions) {
-  const hero = root.querySelector<HTMLElement>("[data-hero-orb]")?.closest("section");
-  const content = root.querySelector<HTMLElement>("[data-hero-content]");
-  const orb = root.querySelector<HTMLElement>("[data-hero-orb]");
-  if (!hero || !content || !orb) return;
-
-  const trigger = { trigger: hero, start: "top top", end: "bottom top", scrub: true };
-  gsap.to(content, { yPercent: c.isMobile ? -8 : -14, opacity: 0.2, ease: "none", scrollTrigger: trigger });
-  gsap.to(orb, { yPercent: c.isMobile ? 10 : 18, scale: 0.92, ease: "none", scrollTrigger: { ...trigger } });
 }

@@ -65,8 +65,10 @@
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
+/* Own stacking context: the pills' z-index (0–100, by depth) stays inside the cloud. */
 .stage {
   position: relative;
+  isolation: isolate;
 }
 
 .glow {

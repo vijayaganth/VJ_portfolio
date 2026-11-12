@@ -3,7 +3,8 @@
   display: flex;
   flex-direction: column;
   min-height: 100svh;
-  overflow: hidden;
+  /* Clip sideways only: the orb's glow may run into the next section instead of ending in a hard line. */
+  overflow-x: clip;
 }
 
 /* A faint line grid that fades out from the orb. */
@@ -43,11 +44,20 @@
   pointer-events: none;
 }
 
+/* The glow: a radial fade rather than a box-shadow, so it has no edge to clip and no ring at the orb. */
+.orbWrap::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--orb-glow), transparent);
+}
+
 .orb {
   position: absolute;
   inset: 0;
   z-index: 2;
-  box-shadow: 0 0 140px var(--orb-glow);
 }
 
 .orbits {
@@ -259,10 +269,6 @@
     width: 300px;
     height: 300px;
     margin-top: 0;
-  }
-
-  .orb {
-    box-shadow: 0 0 80px var(--orb-glow);
   }
 
   .ring {

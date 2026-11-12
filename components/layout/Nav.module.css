@@ -2,7 +2,8 @@
 .header {
   position: fixed;
   inset: 0 0 auto;
-  z-index: 50;
+  /* Above everything on the page, including the Skills cloud's depth-sorted pills. */
+  z-index: 1000;
   color: var(--c-text);
   transition:
     background 0.35s ease,
